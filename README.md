@@ -1,273 +1,467 @@
-# NetPredict
+# 📡 NetPredict
 
 ### Network Throughput Prediction & Performance Analytics
 
-NetPredict is an end-to-end machine learning application for predicting network data throughput and analyzing network performance.
+> An end-to-end Machine Learning project for predicting network data throughput and analyzing network performance using supervised and unsupervised learning.
 
-The project combines supervised and unsupervised machine learning techniques to estimate **Data Throughput (Mbps)** from network conditions and geographical information, compare multiple regression models, evaluate their predictions, and segment network observations into different performance groups using K-Means clustering.
-
-The final system is deployed as an interactive **Streamlit dashboard**.
-
----
-
-## Project Overview
-
-Network performance depends on multiple factors such as signal strength, latency, network technology, and geographic location.
-
-The goal of NetPredict is to build a practical machine learning system that can:
-
-* Predict expected network throughput.
-* Compare different regression algorithms.
-* Evaluate model predictions on unseen test data.
-* Segment network observations into performance groups.
-* Provide an interactive interface for exploring predictions and model behavior.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.13-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/Scikit--Learn-ML-orange?style=for-the-badge&logo=scikit-learn&logoColor=white" alt="Scikit-Learn">
+  <img src="https://img.shields.io/badge/XGBoost-Regression-red?style=for-the-badge" alt="XGBoost">
+  <img src="https://img.shields.io/badge/Streamlit-Dashboard-ff4b4b?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit">
+  <img src="https://img.shields.io/badge/Pandas-Data%20Analysis-150458?style=for-the-badge&logo=pandas&logoColor=white" alt="Pandas">
+  <img src="https://img.shields.io/badge/NumPy-Computing-013243?style=for-the-badge&logo=numpy&logoColor=white" alt="NumPy">
+</p>
 
 ---
 
-## Key Features
+## 📌 Project Overview
 
-### Throughput Prediction
+**NetPredict** is an end-to-end Machine Learning application designed to analyze network conditions, predict **Data Throughput (Mbps)**, compare multiple regression models, and segment network conditions into performance groups.
 
-Users can provide network conditions and select a regression model to estimate expected throughput in Mbps.
+The project combines:
 
-Supported regression models:
+* Exploratory Data Analysis
+* Data preprocessing
+* Feature engineering
+* Regression
+* Hyperparameter tuning
+* Model evaluation
+* Unsupervised learning
+* Model comparison
+* Interactive visualization
+* Streamlit deployment
 
-* Linear Regression
-* K-Nearest Neighbors (KNN)
-* Support Vector Regression (SVR)
-* Random Forest
-* XGBoost
+The final result is an interactive dashboard that allows users to:
 
----
-
-### Model Comparison
-
-NetPredict evaluates all regression models on the same held-out test dataset using:
-
-* Mean Absolute Error (MAE)
-* Root Mean Squared Error (RMSE)
-* R² Score
-
-The dashboard provides:
-
-* Model ranking
-* Metric comparison
-* Performance insights
-* Best-model analysis
-* Model interpretation
+1. Predict expected network throughput.
+2. Compare different Machine Learning models.
+3. Analyze network performance patterns.
+4. Explore K-Means performance segments.
+5. Evaluate model predictions and residuals.
 
 ---
 
-### Network Performance Segmentation
+# 🎯 Problem Statement
 
-K-Means clustering is used to group network observations based on:
+Network performance depends on multiple factors such as:
 
-* Signal Strength
-* Data Throughput
+* Signal strength
 * Latency
+* Geographic location
+* Network technology
+* Other measured network characteristics
 
-The resulting clusters are interpreted as:
+The goal of this project is to build Machine Learning models capable of estimating:
 
-* Low Performance
-* Moderate Performance
-* High Performance
+> **Data Throughput (Mbps)**
 
-These labels describe observed cluster profiles and are not intended as causal explanations.
+based on available network conditions.
 
----
-
-### Model Evaluation
-
-The application provides model-level evaluation including:
-
-* Actual vs. Predicted Throughput
-* Prediction Residuals
-* Residual Statistics
-* Residual Distribution
-* MAE
-* RMSE
-* R²
+The project also aims to identify different **network performance profiles** using unsupervised learning.
 
 ---
 
-## Dataset
+# 🏗️ System Architecture
 
-The dataset contains **16,829 network observations** and includes network, geographic, and measurement-related features.
+```mermaid
+flowchart LR
 
-### Original Features
+    A[Raw Network Dataset] --> B[Data Cleaning]
+    B --> C[Exploratory Data Analysis]
+    C --> D[Feature Selection]
+    D --> E[Train / Test Split]
 
-| Feature                      | Description                 |
-| ---------------------------- | --------------------------- |
-| Timestamp                    | Measurement timestamp       |
-| Locality                     | Geographic locality         |
-| Latitude                     | Geographic latitude         |
-| Longitude                    | Geographic longitude        |
-| Signal Strength (dBm)        | Network signal strength     |
-| Signal Quality (%)           | Signal quality measurement  |
-| Data Throughput (Mbps)       | Target variable             |
-| Latency (ms)                 | Network latency             |
-| Network Type                 | Network technology          |
-| BB60C Measurement (dBm)      | Measurement from BB60C      |
-| srsRAN Measurement (dBm)     | Measurement from srsRAN     |
-| BladeRFxA9 Measurement (dBm) | Measurement from BladeRFxA9 |
+    E --> F[Preprocessing Pipeline]
 
----
+    F --> G[Linear Regression]
+    F --> H[KNN Regression]
+    F --> I[SVR]
+    F --> J[Random Forest]
+    F --> K[XGBoost]
 
-## Data Preprocessing
+    G --> L[Model Evaluation]
+    H --> L
+    I --> L
+    J --> L
+    K --> L
 
-The preprocessing workflow included:
+    L --> M[Model Comparison]
+    M --> N[Selected Primary Model]
 
-1. Data quality inspection.
-2. Removal of the constant `Signal Quality (%)` feature.
-3. Removal of highly redundant measurement features.
-4. Removal of `Timestamp` from the modeling features.
-5. Standardization of network technology labels.
-6. Separation of numerical and categorical features.
-7. Train/test split using an 80/20 ratio.
-8. Feature preprocessing using Scikit-learn pipelines.
+    E --> O[K-Means Clustering]
+    O --> P[Network Performance Segmentation]
 
-### Numerical Features
-
-* Latitude
-* Longitude
-* Signal Strength (dBm)
-* Latency (ms)
-
-### Categorical Features
-
-* Locality
-* Network Type
-
-Categorical features were encoded using One-Hot Encoding, while numerical features were standardized where required.
-
-The preprocessing pipeline ensures that transformations are learned from the training data and consistently applied during testing and deployment.
-
----
-
-## Machine Learning Workflow
-
-```text
-Raw Dataset
-     │
-     ▼
-Data Exploration
-     │
-     ▼
-Data Cleaning
-     │
-     ▼
-Feature Selection
-     │
-     ▼
-Train / Test Split
-     │
-     ├──────────────────────────────┐
-     ▼                              ▼
-Regression Models              K-Means Clustering
-     │                              │
-     ▼                              ▼
-Model Evaluation              Cluster Profiles
-     │                              │
-     └──────────────┬───────────────┘
-                    ▼
-             Streamlit Dashboard
+    N --> Q[Streamlit Dashboard]
+    P --> Q
+    M --> Q
 ```
 
 ---
 
-## Regression Models
+# 🔄 Machine Learning Workflow
 
-### Linear Regression
+```mermaid
+flowchart TD
 
-Used as a baseline model to establish a simple linear relationship between the input features and network throughput.
+    A["Raw Dataset<br/>16,829 Records"] --> B["Data Quality Analysis"]
 
-### KNN Regression
+    B --> C["Remove Constant Features"]
+    C --> D["Remove Redundant Measurements"]
+    D --> E["Handle Categorical Features"]
 
-Uses neighboring observations to estimate the throughput of a new observation.
+    E --> F["Feature / Target Separation"]
 
-### Support Vector Regression
+    F --> G["Train-Test Split<br/>80% / 20%"]
 
-Uses an RBF kernel to model non-linear relationships between the input features and throughput.
+    G --> H["Preprocessing"]
 
-### Random Forest Regression
+    H --> I["Numerical Features<br/>Scaling"]
+    H --> J["Categorical Features<br/>One-Hot Encoding"]
 
-An ensemble of decision trees that combines multiple tree predictions to produce the final regression output.
+    I --> K["Regression Models"]
+    J --> K
 
-### XGBoost Regression
+    K --> L["Evaluation"]
 
-A gradient boosting algorithm that builds an ensemble of decision trees sequentially to improve predictive performance.
+    L --> M["MAE"]
+    L --> N["RMSE"]
+    L --> O["R²"]
 
----
+    M --> P["Model Comparison"]
+    N --> P
+    O --> P
 
-## Model Performance
+    P --> Q["Primary Model"]
 
-All models were evaluated using the same held-out test dataset.
+    G --> R["K-Means"]
+    R --> S["Performance Segmentation"]
 
-| Model             |    MAE |    RMSE |     R² |
-| ----------------- | -----: | ------: | -----: |
-| XGBoost           | 6.4581 | 13.3298 | 0.7359 |
-| Random Forest     | 6.4640 | 13.3387 | 0.7355 |
-| SVR               | 6.5950 | 13.3597 | 0.7347 |
-| KNN               | 6.6088 | 13.4226 | 0.7322 |
-| Linear Regression | 6.8287 | 13.3191 | 0.7363 |
-
-### Model Selection
-
-XGBoost was selected as the primary regression model because it achieved the **lowest MAE (6.4581 Mbps)** among the evaluated models.
-
-However, XGBoost does not outperform every model on every metric:
-
-* Linear Regression achieved the lowest RMSE: **13.3191**
-* Linear Regression achieved the highest R²: **0.7363**
-* XGBoost achieved the lowest MAE: **6.4581**
-
-The relatively small differences between the models indicate that their overall performance is fairly close on this dataset.
+    Q --> T["NetPredict Dashboard"]
+    S --> T
+```
 
 ---
 
-## K-Means Performance Profiles
+# 📊 Dataset
 
-The clustering analysis produced three interpretable performance profiles.
+The dataset contains **16,829 network observations**.
 
-| Performance Level    | Signal Strength (dBm) | Throughput (Mbps) | Latency (ms) |
-| -------------------- | --------------------: | ----------------: | -----------: |
-| Low Performance      |                -86.47 |              2.12 |       153.21 |
-| Moderate Performance |                -91.27 |              7.56 |        77.90 |
-| High Performance     |                -95.82 |             62.98 |        29.61 |
+### Original Features
 
-These values represent the observed cluster profiles.
-
-The cluster labels are interpretations based on the combination of throughput, latency, and signal-related characteristics.
+| Feature                        | Description                     |
+| ------------------------------ | ------------------------------- |
+| `Timestamp`                    | Measurement timestamp           |
+| `Locality`                     | Geographic/locality information |
+| `Latitude`                     | Geographic latitude             |
+| `Longitude`                    | Geographic longitude            |
+| `Signal Strength (dBm)`        | Measured signal strength        |
+| `Signal Quality (%)`           | Signal quality percentage       |
+| `Data Throughput (Mbps)`       | **Target variable**             |
+| `Latency (ms)`                 | Network latency                 |
+| `Network Type`                 | Network technology              |
+| `BB60C Measurement (dBm)`      | Signal measurement              |
+| `srsRAN Measurement (dBm)`     | Signal measurement              |
+| `BladeRFxA9 Measurement (dBm)` | Signal measurement              |
 
 ---
 
-## Streamlit Dashboard
+# 🧹 Data Preprocessing
 
-The final application provides six main sections.
+The preprocessing stage focused on improving data quality while avoiding unnecessary feature removal.
+
+### Removed Features
+
+#### `Signal Quality (%)`
+
+The feature contained a constant value and therefore provided no useful information for the models.
+
+#### Hardware Measurement Features
+
+The following measurements were highly redundant:
+
+```text
+BB60C Measurement (dBm)
+srsRAN Measurement (dBm)
+BladeRFxA9 Measurement (dBm)
+```
+
+Their extremely high correlation indicated that they contained largely overlapping information.
+
+#### `Timestamp`
+
+The timestamp was removed because exploratory analysis did not reveal a sufficiently useful temporal pattern for the modeling objective.
+
+---
+
+## Feature Preparation
+
+The final model inputs consisted of:
+
+### Numerical Features
+
+```text
+Latitude
+Longitude
+Signal Strength (dBm)
+Latency (ms)
+```
+
+### Categorical Features
+
+```text
+Locality
+Network Type
+```
+
+### Target
+
+```text
+Data Throughput (Mbps)
+```
+
+The network labels were also standardized by merging:
+
+```text
+LTE → 4G
+```
+
+resulting in:
+
+```text
+4G
+3G
+5G
+```
+
+---
+
+# 🔐 Leakage-Free Preprocessing
+
+The project uses `Pipeline` and `ColumnTransformer` to ensure preprocessing is learned only from the training data.
+
+```python
+preprocessor = ColumnTransformer(
+    transformers=[
+        ("num", StandardScaler(), numerical_features),
+        ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)
+    ]
+)
+```
+
+This provides two important advantages:
+
+* Consistent preprocessing during training and prediction.
+* Protection against data leakage from the test set.
+
+---
+
+# 🤖 Machine Learning Models
+
+Five regression algorithms were implemented and evaluated.
+
+| Model             | Main Idea                                           |
+| ----------------- | --------------------------------------------------- |
+| Linear Regression | Linear relationship between features and throughput |
+| KNN Regressor     | Predicts using nearby observations                  |
+| SVR               | Learns a flexible regression boundary               |
+| Random Forest     | Ensemble of decision trees                          |
+| XGBoost           | Gradient boosting with sequential tree optimization |
+
+---
+
+# 📈 Model Performance
+
+The models were evaluated using:
+
+* **MAE** — Mean Absolute Error
+* **RMSE** — Root Mean Squared Error
+* **R²** — Coefficient of Determination
+
+### Final Test Results
+
+| Rank | Model             |      MAE ↓ |      RMSE ↓ |       R² ↑ |
+| ---: | ----------------- | ---------: | ----------: | ---------: |
+| 🥇 1 | **XGBoost**       | **6.4581** |     13.3298 |     0.7359 |
+| 🥈 2 | Random Forest     |     6.4640 |     13.3387 |     0.7355 |
+| 🥉 3 | SVR               |     6.5950 |     13.3597 |     0.7347 |
+|    4 | KNN               |     6.6088 |     13.4226 |     0.7322 |
+|    5 | Linear Regression |     6.8287 | **13.3191** | **0.7363** |
+
+### Model Comparison
+
+```mermaid
+xychart-beta
+    title "Model Comparison — MAE"
+    x-axis ["XGBoost", "Random Forest", "SVR", "KNN", "Linear Regression"]
+    y-axis "MAE" 0 --> 8
+    bar [6.4581, 6.4640, 6.5950, 6.6088, 6.8287]
+```
+
+> Lower MAE indicates better average absolute prediction error.
+
+---
+
+# 🏆 Model Selection
+
+**XGBoost** was selected as the primary model because it achieved the **lowest MAE** among the evaluated models.
+
+However, model performance is not identical across all metrics.
+
+* **XGBoost** achieved the lowest MAE.
+* **Linear Regression** achieved slightly lower RMSE.
+* **Linear Regression** also achieved slightly higher R².
+* Overall model performance was relatively close.
+
+Therefore, XGBoost was selected primarily according to the project's focus on minimizing average absolute prediction error.
+
+---
+
+# 📐 Evaluation Metrics
+
+## MAE
+
+Mean Absolute Error measures the average absolute difference between actual and predicted values.
+
+A lower MAE means predictions are closer to the actual throughput values on average.
+
+---
+
+## RMSE
+
+RMSE gives higher importance to larger prediction errors.
+
+A lower RMSE indicates fewer large prediction deviations.
+
+---
+
+## R²
+
+R² measures how much of the variation in the target is explained by the model.
+
+A value closer to `1` indicates stronger explanatory performance.
+
+---
+
+# 🧠 Model Evaluation
+
+The dashboard provides detailed evaluation for each regression model, including:
+
+* Actual vs Predicted values
+* Residual analysis
+* MAE
+* RMSE
+* R²
+* Mean residual
+* Residual standard deviation
+* Maximum absolute residual
+
+### Evaluation Concept
+
+```mermaid
+flowchart LR
+
+    A["Test Dataset"] --> B["Trained Model"]
+
+    B --> C["Predictions"]
+
+    C --> D["Actual vs Predicted"]
+    C --> E["Residual Analysis"]
+
+    D --> F["Model Quality"]
+    E --> F
+
+    F --> G["MAE / RMSE / R²"]
+```
+
+---
+
+# 🧩 Network Performance Segmentation
+
+In addition to supervised regression, **K-Means Clustering** was used to discover groups of network observations with similar performance characteristics.
+
+Three clusters were identified.
+
+| Cluster | Performance Level    | Signal Strength | Throughput |   Latency |
+| ------: | -------------------- | --------------: | ---------: | --------: |
+|       0 | Low Performance      |      -86.47 dBm |  2.12 Mbps | 153.21 ms |
+|       1 | High Performance     |      -95.82 dBm | 62.98 Mbps |  29.61 ms |
+|       2 | Moderate Performance |      -91.27 dBm |  7.56 Mbps |  77.90 ms |
+
+### Performance Profiles
+
+```mermaid
+flowchart TD
+
+    A["Network Observations"] --> B["K-Means"]
+
+    B --> C["Low Performance"]
+    B --> D["Moderate Performance"]
+    B --> E["High Performance"]
+
+    C --> F["Low Throughput<br/>High Latency"]
+    D --> G["Intermediate Profile"]
+    E --> H["High Throughput<br/>Low Latency"]
+```
+
+> Cluster labels represent observed profiles in the dataset. They should not be interpreted as direct causal relationships between individual features and network performance.
+
+---
+
+# 📊 Key Network Insight
+
+The clustering analysis revealed clear differences in network performance profiles.
+
+The most important distinction between the identified groups was the combination of:
+
+```text
+Throughput
+Latency
+Signal characteristics
+```
+
+The high-performance cluster showed substantially higher throughput and lower latency than the other groups.
+
+---
+
+# 🖥️ NetPredict Dashboard
+
+The final application was built using **Streamlit**.
+
+## Dashboard Sections
 
 ### 1. Overview
 
-Provides a high-level summary of:
+Provides:
 
-* Dataset size
-* Number of regression models
-* Number of performance clusters
-* Selected model
-* Model performance
-* Project objectives
+* Dataset statistics
+* Model performance summary
+* Primary model insight
+* Project objective
+* High-level analytics
+
+---
 
 ### 2. Prediction
 
-Allows users to enter:
+Users can provide:
 
-* Locality
-* Latitude
-* Longitude
-* Network Type
-* Signal Strength
-* Latency
+```text
+Locality
+Latitude
+Longitude
+Network Type
+Signal Strength
+Latency
+```
 
-The application then predicts expected throughput and identifies the corresponding network performance level.
+The dashboard then predicts:
+
+> **Data Throughput (Mbps)**
+
+The prediction page also displays the corresponding network performance profile.
+
+---
 
 ### 3. Model Comparison
 
@@ -277,9 +471,10 @@ Provides:
 * MAE comparison
 * RMSE comparison
 * R² comparison
+* Best-performing models
 * Performance insights
-* Best-model analysis
-* Model interpretation
+
+---
 
 ### 4. Network Segmentation
 
@@ -288,42 +483,93 @@ Provides:
 * Cluster profiles
 * Throughput comparison
 * Latency comparison
-* Interactive cluster identification
+* Interactive cluster prediction
+* Performance-level classification
+
+---
 
 ### 5. Model Evaluation
 
 Provides:
 
-* Model metrics
-* Actual vs. predicted throughput
+* Actual vs Predicted visualization
 * Residual analysis
-* Residual statistics
+* Model metrics
 * Residual distribution
-
-### 6. About
-
-Provides information about:
-
-* Project objectives
-* Machine learning models
-* Project workflow
-* Technologies used
+* Error statistics
 
 ---
 
-## Project Structure
+### 6. About
+
+Contains:
+
+* Project description
+* ML workflow
+* Models used
+* Technologies
+* Project information
+
+---
+
+# 📸 Dashboard Preview
+
+> Add screenshots of the final Streamlit dashboard here.
+
+Recommended structure:
+
+```text
+docs/
+└── images/
+    ├── overview.png
+    ├── prediction.png
+    ├── model-comparison.png
+    ├── segmentation.png
+    └── evaluation.png
+```
+
+Then add:
+
+```markdown
+## Dashboard Preview
+
+### Overview
+
+![NetPredict Overview](docs/images/overview.png)
+
+### Prediction
+
+![NetPredict Prediction](docs/images/prediction.png)
+
+### Model Comparison
+
+![Model Comparison](docs/images/model-comparison.png)
+
+### Network Segmentation
+
+![Network Segmentation](docs/images/segmentation.png)
+
+### Model Evaluation
+
+![Model Evaluation](docs/images/evaluation.png)
+```
+
+---
+
+# 🗂️ Project Structure
 
 ```text
 NTI-Final-Project/
 │
 ├── data/
 │   ├── raw/
+│   │   └── dataset.csv
+│   │
 │   └── processed/
 │       ├── X_train.csv
 │       ├── X_test.csv
 │       ├── y_train.csv
-│       ├── y_test.csv
-│       └── model_comparison.csv
+│       └── y_test.csv
 │
 ├── notebooks/
 │   ├── 01_EDA.ipynb
@@ -345,7 +591,8 @@ NTI-Final-Project/
 │   └── kmeans.joblib
 │
 ├── app/
-│   └── app.py
+│   ├── app.py
+│   └── assets/
 │
 ├── requirements.txt
 │
@@ -354,31 +601,37 @@ NTI-Final-Project/
 
 ---
 
-## Technologies
+# ⚙️ Technologies
 
-### Programming Language
+### Programming
 
 * Python
 
-### Data Processing
+### Data Analysis
 
 * Pandas
 * NumPy
 
+### Visualization
+
+* Matplotlib
+* Seaborn
+* Streamlit charts
+
 ### Machine Learning
 
-* Scikit-learn
+* Scikit-Learn
 * XGBoost
 
 ### Model Persistence
 
 * Joblib
 
-### Deployment / Dashboard
+### Application
 
 * Streamlit
 
-### Development Environment
+### Development
 
 * Jupyter Notebook
 * PyCharm
@@ -387,23 +640,40 @@ NTI-Final-Project/
 
 ---
 
-## Installation
+# 🚀 Installation
 
-Clone the repository:
+## 1. Clone the Repository
 
 ```bash
 git clone <YOUR_GITHUB_REPOSITORY_URL>
 cd NTI-Final-Project
 ```
 
-Create and activate the virtual environment:
+---
+
+## 2. Create a Virtual Environment
 
 ```bash
 python3 -m venv .venv
+```
+
+Activate it:
+
+### Linux / macOS
+
+```bash
 source .venv/bin/activate
 ```
 
-Install the required dependencies:
+### Windows
+
+```bash
+.venv\Scripts\activate
+```
+
+---
+
+## 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -411,7 +681,7 @@ pip install -r requirements.txt
 
 ---
 
-## Running the Application
+# ▶️ Run the Application
 
 From the project root:
 
@@ -419,90 +689,241 @@ From the project root:
 streamlit run app/app.py
 ```
 
-The application will open in the browser.
+The application will start locally and provide a URL similar to:
+
+```text
+http://localhost:8501
+```
 
 ---
 
-## Model Files
+# 🔬 Reproducing the Project
 
-The trained models are stored in the `models/` directory.
+The notebooks are organized according to the Machine Learning workflow.
 
-The application loads the saved pipelines using Joblib rather than retraining the models every time the dashboard starts.
+Recommended execution order:
 
-This allows the Streamlit application to focus on inference and analysis.
+```text
+01_EDA
+   ↓
+02_Preprocessing
+   ↓
+03_Linear_Regression
+   ↓
+04_KNN
+   ↓
+05_SVR
+   ↓
+06_Random_Forest
+   ↓
+07_XGBoost
+   ↓
+08_KMeans
+   ↓
+09_Model_Comparison
+```
 
----
-
-## Evaluation Metrics
-
-### MAE — Mean Absolute Error
-
-Measures the average absolute difference between actual and predicted throughput.
-
-Lower values indicate smaller average prediction errors.
-
-### RMSE — Root Mean Squared Error
-
-Measures prediction error while giving greater weight to larger errors.
-
-Lower values indicate better performance.
-
-### R² Score
-
-Measures how much of the variance in the target variable is explained by the model.
-
-Higher values indicate better explanatory performance.
+The preprocessing notebook creates the shared train/test datasets used by the modeling notebooks.
 
 ---
 
-## Limitations
+# 🔒 Reproducibility
 
-The current project has several limitations:
+The project uses fixed random states where applicable:
 
-* Model performance is dependent on the available dataset.
-* The dataset represents specific network and geographic conditions.
-* Predictions should not be interpreted as guaranteed throughput values.
-* MAE represents average test-set error and is not an individual prediction confidence interval.
-* K-Means cluster labels are interpretations of observed profiles rather than supervised classifications.
-* The current system does not provide real-time network measurements.
+```python
+RANDOM_STATE = 42
+```
 
----
-
-## Future Improvements
-
-Potential future improvements include:
-
-* Real-time network data integration.
-* Automated model retraining.
-* Hyperparameter optimization and experiment tracking.
-* Additional geographic visualizations.
-* Monitoring model performance over time.
-* Deployment to a cloud platform.
-* REST API for model inference.
-* Automated data pipelines.
-* More advanced explainability techniques such as SHAP.
+This helps maintain consistent train/test splits and reproducible model behavior.
 
 ---
 
-## Project Outcome
+# 📦 Saved Models
 
-NetPredict demonstrates a complete machine learning workflow from:
+Trained models are persisted using `joblib`.
 
-**Data Exploration → Preprocessing → Model Development → Evaluation → Clustering → Deployment**
+```text
+models/
+├── linear_regression.joblib
+├── knn.joblib
+├── svr.joblib
+├── random_forest.joblib
+├── xgboost.joblib
+└── kmeans.joblib
+```
 
-The project combines multiple machine learning approaches with an interactive dashboard to provide both predictive and analytical insights into network performance.
+This allows the Streamlit application to load trained models directly without retraining them during every application startup.
 
 ---
 
-## Author
+# 💡 Key Takeaways
+
+### 1. XGBoost achieved the lowest MAE
+
+The XGBoost model achieved:
+
+```text
+MAE = 6.4581 Mbps
+```
+
+making it the primary model for the dashboard.
+
+---
+
+### 2. Tree-based models performed competitively
+
+Random Forest and XGBoost produced very similar results, indicating that both ensemble approaches captured useful nonlinear patterns in the dataset.
+
+---
+
+### 3. Different metrics can produce different rankings
+
+No single metric should be considered in isolation.
+
+The models showed slightly different behavior across:
+
+```text
+MAE
+RMSE
+R²
+```
+
+Therefore, model selection was based primarily on the project's main objective rather than claiming one model was universally superior.
+
+---
+
+### 4. Network observations form distinct performance profiles
+
+K-Means revealed three interpretable network performance groups:
+
+```text
+Low Performance
+Moderate Performance
+High Performance
+```
+
+These profiles provide an additional analytical perspective beyond throughput prediction.
+
+---
+
+# ⚠️ Limitations
+
+Although the project demonstrates a complete ML workflow, several limitations remain.
+
+### Dataset Limitations
+
+The model is dependent on the available network measurements and their quality.
+
+### Generalization
+
+Performance on unseen environments, locations, or network infrastructures may differ from the reported test-set results.
+
+### Feature Availability
+
+The prediction system only uses features available in the project dataset.
+
+### Regression Error
+
+The models still produce non-zero prediction errors, meaning throughput predictions should be treated as estimates rather than exact measurements.
+
+### Clustering Interpretation
+
+K-Means clusters describe patterns in the observed data but do not establish causal relationships.
+
+---
+
+# 🔮 Future Improvements
+
+Possible future improvements include:
+
+* Collecting larger and more geographically diverse datasets.
+* Adding additional network-quality indicators.
+* Performing more advanced feature engineering.
+* Testing additional boosting algorithms.
+* Applying cross-validation more extensively.
+* Adding explainable AI techniques such as SHAP.
+* Adding geospatial network-performance maps.
+* Monitoring prediction drift over time.
+* Deploying the application to a cloud platform.
+* Building an API layer for external applications.
+* Adding real-time network measurements.
+
+---
+
+# 🧠 Project Learning Outcomes
+
+Through this project, the following Machine Learning concepts were applied:
+
+```text
+Data Cleaning
+      ↓
+Exploratory Data Analysis
+      ↓
+Feature Selection
+      ↓
+Data Preprocessing
+      ↓
+Train/Test Split
+      ↓
+Regression
+      ↓
+Hyperparameter Tuning
+      ↓
+Model Evaluation
+      ↓
+Model Comparison
+      ↓
+Clustering
+      ↓
+Model Deployment
+      ↓
+Interactive Dashboard
+```
+
+The project therefore covers the complete lifecycle from **raw data to an interactive ML application**.
+
+---
+
+# 🏁 Project Outcome
+
+NetPredict demonstrates how Machine Learning can be used to transform raw network measurements into an interactive analytics and prediction system.
+
+The project combines:
+
+> **Prediction + Evaluation + Segmentation + Visualization + Deployment**
+
+into a single application.
+
+The final system provides both a predictive perspective through regression models and an analytical perspective through network performance segmentation.
+
+---
+
+# 👨‍💻 Author
 
 **Mohamed Abdullah**
 
 Computer Science Student
-AI & Machine Learning Enthusiast
+Artificial Intelligence Specialization
+
+Interested in:
+
+* Machine Learning
+* Artificial Intelligence
+* Software Engineering
+* Competitive Programming
+* AI Engineering
 
 ---
 
-## License
+# ⭐ Acknowledgment
 
-This project was developed as an educational and portfolio project.
+This project was developed as part of the **NTI Machine Learning training program** and represents an applied Machine Learning project covering data analysis, supervised learning, unsupervised learning, evaluation, and deployment.
+
+---
+
+# 📄 License
+
+This project is intended for educational and portfolio purposes.
+
+If you use or extend this project, please provide appropriate attribution.
