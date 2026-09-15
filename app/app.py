@@ -873,6 +873,8 @@ if page == "Model Comparison":
 
     with insight_col4:
         with st.container(border=True):
+
+
             st.metric("MAE Improvement", f"{mae_improvement_pct:.2f}%")
 
     st.caption(f"Best MAE is {mae_improvement_pct:.2f}% lower than the worst MAE among the evaluated models.")
